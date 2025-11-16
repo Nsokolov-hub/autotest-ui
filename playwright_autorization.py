@@ -1,6 +1,6 @@
 from playwright.sync_api import Page, expect
 
-from playwright.sync_api import sync_playwright, expect  # Импорт Playwright для синхронного режима и проверки
+from playwright.sync_api import sync_playwright, expect  
 
 
 with sync_playwright() as playwright:
