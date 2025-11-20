@@ -1,7 +1,8 @@
 import pytest
 from pathlib import Path
+from typing import Generator
 
-from playwright.sync_api import Playwright, Page, expect, sync_playwright
+from playwright.sync_api import sync_playwright, Page, expect
 
 
 BASE_URL = (
@@ -13,18 +14,9 @@ BROWSER_STATE_PATH = Path("browser-state.json")
 
 
 @pytest.fixture(scope="session")
-def playwright() -> Playwright:
-    
-    playwright_instance = sync_playwright().start()
-    yield playwright_instance
-    playwright_instance.stop()
-
-
-@pytest.fixture(scope="session")
-def initialize_browser_state(playwright: Playwright) -> None:
-    
-
-    browser = playwright.chromium.launch(headless=False)
+def initialize_browser_state() -> None:
+    p = sync_playwright().start()
+    browser = p.chromium.launch(headless=False)
     context = browser.new_context()
     page = context.new_page()
 
@@ -54,22 +46,39 @@ def initialize_browser_state(playwright: Playwright) -> None:
     registration_button.click()
 
     context.storage_state(path=str(BROWSER_STATE_PATH))
-    
-    
+
+    context.close()
+    browser.close()
+    p.stop()
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture
 def chromium_page_with_state(
-    initialize_browser_state, playwright: Playwright
-) -> Page:
-    
-
-    browser = playwright.chromium.launch(headless=False)
+    initialize_browser_state,
+) -> Generator[Page, None, None]:
+    p = sync_playwright().start()
+    browser = p.chromium.launch(headless=False)
     context = browser.new_context(storage_state=str(BROWSER_STATE_PATH))
     page = context.new_page()
 
     yield page
 
-    
+    context.close()
+    browser.close()
+    p.stop()
 
+
+@pytest.fixture
+def chromium_page() -> Generator[Page, None, None]:
+    """Provide a fresh page without stored auth state (for negative auth tests)."""
+    p = sync_playwright().start()
+    browser = p.chromium.launch(headless=False)
+    context = browser.new_context()
+    page = context.new_page()
+
+    yield page
+
+    context.close()
+    browser.close()
+    p.stop()
 
