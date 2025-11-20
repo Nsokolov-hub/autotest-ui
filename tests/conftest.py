@@ -15,9 +15,9 @@ BROWSER_STATE_PATH = Path("browser-state.json")
 @pytest.fixture(scope="session")
 def playwright() -> Playwright:
     
-    pw = sync_playwright().start()
-    yield pw
-    pw.stop()
+    playwright_instance = sync_playwright().start()
+    yield playwright_instance
+    playwright_instance.stop()
 
 
 @pytest.fixture(scope="session")
@@ -55,8 +55,7 @@ def initialize_browser_state(playwright: Playwright) -> None:
 
     context.storage_state(path=str(BROWSER_STATE_PATH))
     
-    context.close()
-    browser.close()
+    
 
 
 @pytest.fixture(scope="function")
@@ -71,7 +70,6 @@ def chromium_page_with_state(
 
     yield page
 
-    context.close()
-    browser.close()
+    
 
 
