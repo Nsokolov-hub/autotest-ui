@@ -4,6 +4,9 @@ from typing import Generator
 
 from playwright.sync_api import sync_playwright, Page, expect
 
+# load fixtures defined in fixtures/pages.py as a pytest plugin
+pytest_plugins = ["fixtures.pages"]
+
 
 BASE_URL = (
     "https://nikita-filonov.github.io/"
@@ -70,7 +73,7 @@ def chromium_page_with_state(
 
 @pytest.fixture
 def chromium_page() -> Generator[Page, None, None]:
-    """Provide a fresh page without stored auth state (for negative auth tests)."""
+    
     p = sync_playwright().start()
     browser = p.chromium.launch(headless=False)
     context = browser.new_context()
