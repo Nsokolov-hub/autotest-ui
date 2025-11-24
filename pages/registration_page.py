@@ -10,18 +10,10 @@ BASE_URL = (
 class RegistrationPage:
     def __init__(self, page: Page):
         self.page = page
-        self.registration_button = page.get_by_test_id(
-            "registration-page-registration-button"
-        )
-        self.email_input = page.get_by_test_id(
-            "registration-form-email-input"
-        ).locator("input")
-        self.username_input = page.get_by_test_id(
-            "registration-form-username-input"
-        ).locator("input")
-        self.password_input = page.get_by_test_id(
-            "registration-form-password-input"
-        ).locator("input")
+        self.registration_button = page.get_by_test_id("registration-page-registration-button")
+        self.email_input = page.get_by_test_id("registration-form-email-input").locator("input")
+        self.username_input = page.get_by_test_id("registration-form-username-input").locator("input")
+        self.password_input = page.get_by_test_id("registration-form-password-input").locator("input")
 
     def open_registration_page(self) -> None:
         self.page.goto(f"{BASE_URL}/auth/registration")

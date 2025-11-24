@@ -32,9 +32,7 @@ def test_wrong_email_or_password_authorization(
     password_input.fill(password)
     login_button.click()
 
-    # проверяем появление уведомления об ошибке
     alert = page.get_by_test_id("notification")
-    # fallback: иногда уведомление может не иметь data-test-id, ищем по тексту
     if alert.count() == 0:
         alert = page.get_by_text("Wrong email or password")
 

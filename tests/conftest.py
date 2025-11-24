@@ -4,7 +4,6 @@ from typing import Generator
 
 from playwright.sync_api import sync_playwright, Page, expect
 
-# load fixtures defined in fixtures/pages.py as a pytest plugin
 pytest_plugins = ["fixtures.pages"]
 
 
